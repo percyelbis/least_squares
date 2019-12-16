@@ -7,5 +7,5 @@
 
 * **Percy Elbis Colque**
 ## Video
-* ["blog"](https://percyelbis.blogspot.com/2019/12/ajuste-por-minimos-cuadrados-en.html)
+* [blog](https://percyelbis.blogspot.com/2019/12/ajuste-por-minimos-cuadrados-en.html)
 
