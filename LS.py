@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Compensación por el metodo de minimos cuadrados
-en nivelación
-
+en nivelación - Moldelo Matematico Lineal AX = L + V
 """
 # Importar librerias
 import numpy as np
@@ -10,22 +9,25 @@ import numpy as np
 import matriz
 
 
+print("Ingrese la matriz de diseño")
+A = matriz.c_mat()
+print("Ingrese el vector de observaciones")
+L = matriz.c_mat()
 
-A = matriz.c_mat() # matriz de los coeficientes de las incognitas
-L = matriz.c_mat() # matriz de observaciones
-
-P = [1, 1, 4, 2, 2] # matriz de pesos - matriz diagonal
+# Pesos 
+P = [257.667, 372.446, 137.71, 29.716, 116.125, 205.444,
+     367.159, 237.947, 209.715, 30.770, 158.654, 381.997] # matriz de pesos {Distancias}
 
 def ls(A, L, P):
     '''
-    Ingresar A: Matriz
-    L: Matriz
-    P: Lista
+    A: Matriz de diseño
+    L: Vector de Observaciones
+    P: Lista de Pesos
     '''
     # Matriz de Pesos
     filas, col = len(P), len(P)
     Pd = np.zeros((filas, col) , float)
-    np.fill_diagonal(Pd, P)
+    np.fill_diagonal(Pd, list(np.reciprocal(list(map(float,P)))))
     
     # inv((A'*P*A))*A'*P*L
     ATP = np.dot(np.transpose(A), Pd)
@@ -38,33 +40,33 @@ def ls(A, L, P):
     
     # Residuos
     V = np.dot(A, X)- L
+
+    #redundancia
+    filas, cols = np.array(A).shape
+    r = filas - cols
+    # desviacion standar peso unitario
+    sigma = np.sqrt(np.divide(np.dot(np.dot(np.transpose(V), Pd), V), r))
+    # desviaciones standar para los puntos medidos
+    s = np.transpose(sigma*np.diag(np.sqrt(iATPA)))
     
-    return print("Elevaciones Ajustadas \n", X, "\nResiduos \n", V)
-
-
-
-
-
-# Test Libro Topografia Wolf and Brinker --- 9 Edicicion Pagina 779
-'''
-A = [[1, 0],
-     [1, 0],
-     [-1, 1],
-     [0, 1],
-     [0, 1]]
-
-L = [[796.20],
-     [796.24],
-     [3.58],
-     [799.79],
-     [799.73]]
-P = [[1, 0, 0, 0, 0],
-     [0, 1, 0, 0, 0],
-     [0, 0, 4, 0, 0],
-     [0, 0, 0, 2, 0],
-     [0, 0, 0, 0, 2]]
-'''
-
+    return print("Elevaciones Ajustadas \n", X,
+               "\n----------------------------\n",
+               "\nV - Residuos \n", V,
+               "\n----------------------------\n",
+               "\nQxx  - Covarianza\n", iATPA,
+               "\n----------------------------\n",
+               "\nSo - Desviación estándar de peso unitario \n", sigma,
+               "\n----------------------------\n",
+               "\nSx - Desviación Standar de los valores ajustados \n", s,
+               "\n----------------------------\n",
+               "\nW - Pesos \n", Pd,
+               "\n----------------------------\n",
+               "\nLocal accuracy al 95%: \n", np.mean(np.dot(1.96,s)), "m")
+print("----------------------------")
+print("---Imprimiendo resultados---")
+print("----------------------------")
+print(ls(A,L,P))
+print("Gracias Totales!!!")
 
 
 
