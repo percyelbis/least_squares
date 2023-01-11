@@ -3,5 +3,5 @@
 
 * **Percy Elbis Colque**
 ## Video
-* [Youtube](https://percyelbis.blogspot.com/2019/12/ajuste-por-minimos-cuadrados-en.html)
+* [Youtube](https://youtu.be/azj4U4wHrrU)
 
