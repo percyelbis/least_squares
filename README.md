@@ -3,5 +3,5 @@
 ## Autor
 * **Percy Elbis Colque**
 ## Video
-* [Youtube]([https://youtu.be/qDkMaF9b1R8](https://youtu.be/1IYQhPFHyAw])
+* [Youtube]([https://youtu.be/1IYQhPFHyAw])
 
