@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 """
 Compensación por el metodo de minimos cuadrados
-en nivelación - Moldelo Matematico Lineal AX = L + V
+en nivelación - Modelo Matematico Lineal AX = L + V
+donde:
+A = Matriz de diseño
+X = Vector de Incognitas
+L = Vector de mediciones
+V = Vector de Residuos o Ruido
 """
 # Importar librerias
 import numpy as np
@@ -13,10 +18,12 @@ print("Ingrese la matriz de diseño")
 A = matriz.c_mat()
 print("Ingrese el vector de observaciones")
 L = matriz.c_mat()
+print("Ingrese la presicion del equipo en mm")
+nivel = float(input("mm/km :"))
+print("Ingrese el vector de distancias en Km")
+P = matriz.c_mat()
 
-# Pesos 
-P = [257.667, 372.446, 137.71, 29.716, 116.125, 205.444,
-     367.159, 237.947, 209.715, 30.770, 158.654, 381.997] # matriz de pesos {Distancias}
+
 
 def ls(A, L, P):
     '''
@@ -27,7 +34,7 @@ def ls(A, L, P):
     # Matriz de Pesos
     filas, col = len(P), len(P)
     Pd = np.zeros((filas, col) , float)
-    np.fill_diagonal(Pd, list(np.reciprocal(list(map(float,P)))))
+    np.fill_diagonal(Pd, np.reciprocal(np.power(0.001*nivel*np.sqrt(np.array(P).astype(float)),2)))
     
     # inv((A'*P*A))*A'*P*L
     ATP = np.dot(np.transpose(A), Pd)
@@ -53,7 +60,9 @@ def ls(A, L, P):
                "\n----------------------------\n",
                "\nV - Residuos \n", V,
                "\n----------------------------\n",
-               "\nQxx  - Covarianza\n", iATPA,
+               "\nQxx  - Cofactores\n", iATPA,
+               "\n----------------------------\n",
+               "\nCx  - Covarianza\n", (np.power(sigma,2))*iATPA,
                "\n----------------------------\n",
                "\nSo - Desviación estándar de peso unitario \n", sigma,
                "\n----------------------------\n",
